@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scraper framework="1.1" date="2012-06-15" name="fanedits.com" content="movies" thumb="icon.png" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<NfoUrl dest="3">
+		<RegExp input="$$1" output="\1" dest="3">
+			<expression noclean="1">http://originaltrilogy\.com/fan-edits/fan-project-details\.cfm/Fan-Edits/title/(.[^&lt;]*)</expression>
+		</RegExp>
+	</NfoUrl>
+	<CreateSearchUrl dest="3">
+		<RegExp input="$$1" output="&lt;url&gt;http://www.google.com/search?hl=en&amp;output=search&amp;q=site%3Aoriginaltrilogy.com+%22Specifications%22+\1&lt;/url&gt;" dest="3">
+			<expression></expression>
+   		</RegExp>
+	</CreateSearchUrl>
+	<GetSearchResults dest="8">
+		<RegExp input="$$3" output="&lt;results&gt;\1&lt;/results&gt;" dest="8">
+			<RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;http://originaltrilogy.com/fan-edits/fan-project-details.cfm/\1/title/\2/project/\3/&lt;/url&gt;&lt;/entity&gt;" dest="3">
+				<expression repeat="yes">&quot;/url\?q=http://originaltrilogy\.com/fan-edits/fan-project-details\.cfm/(.[^&lt;]*)/title/(.[^&lt;]*)/project/(.[^&lt;]*)/&amp;amp;sa=</expression>
+			</RegExp>
+			<expression noclean="1" />
+		</RegExp>
+	</GetSearchResults>
+	<GetDetails dest="3">
+		<RegExp input="$$8" output="&lt;details&gt;\1&lt;/details&gt;" dest="3">
+			<RegExp input="$$1" output="&lt;title&gt;FE: \1&lt;/title&gt;" dest="8">
+				<expression trim="1" noclean="1">&lt;h1 class=&quot;title&quot;&gt;(.[^&lt;]*)&lt;/h1&gt;</expression>
+			</RegExp>
+			<RegExp input="$$1" output="&lt;sorttitle&gt;\1&lt;/sorttitle&gt;&lt;originaltitle&gt;\1&lt;/originaltitle&gt;" dest="8+">
+				<expression trim="1">title=&quot;Read about (.[^&lt;]*) and see all projects related to this film</expression>
+			</RegExp>
+			<RegExp input="$$9" output="&lt;year&gt;\1&lt;/year&gt;" dest="8+">
+				<RegExp input="$$1" output="\1" dest="9">
+					<expression trim="1">Release Date(.*)Categories</expression>
+				</RegExp>
+				<expression trim="1">,(.[^&lt;]*)</expression>
+			</RegExp>
+			<RegExp input="$$1" output="&lt;director&gt;\1&lt;/director&gt;" dest="8+">
+				<expression trim="1"> / Contributors: (.[^&lt;]*)&quot; /&gt;</expression>
+			</RegExp>
+			<RegExp input="$$1" output="&lt;plot&gt;\1&lt;/plot&gt;&lt;outline&gt;\1&lt;/outline&gt;" dest="8+">
+				<expression trim="1" noclean="1">&lt;meta name=&quot;description&quot; content=&quot;Summary:(.[^&lt;]*)/ Status:</expression>
+			</RegExp>
+			<RegExp input="$$1" output="&lt;thumb&gt;\1&lt;/thumb&gt;" dest="8+">
+				<expression trim="1" repeat="yes">&lt;img src=&quot;(.[^&lt;&quot;]*)&quot;</expression>
+			</RegExp>
+			<expression noclean="1" />
+		</RegExp>
+	</GetDetails>
+	
+</scraper>
